@@ -71,35 +71,37 @@ export async function renderFolderView(items, path, request) {
                       })
                     }
 
-                    var items = document.querySelectorAll('.item');
-                    items.forEach((item) => {
-                      var link = item.href;
-                      if (link.endsWith('.mp4')) {
-                        var fileName = link.split('/').pop();
-                        var xmlUrl = 'https://dm.asdanmaku.com/Xml/' + fileName.replace('.mp4', '.xml');
-                        var pbfUrl = 'https://dm.asdanmaku.com/Pbf/' + fileName.replace('.mp4', '.pbf');
+                    window.addEventListener("load", function (event) {
+                      var items = document.querySelectorAll('.item');
+                      items.forEach((item) => {
+                        var link = item.href;
+                        if (link.endsWith('.mp4')) {
+                          var fileName = link.split('/').pop();
+                          var xmlUrl = 'https://dm.asdanmaku.com/Xml/' + fileName.replace('.mp4', '.xml');
+                          var pbfUrl = 'https://dm.asdanmaku.com/Pbf/' + fileName.replace('.mp4', '.pbf');
 
-                        UrlExists(pbfUrl).then(result => {
-                          if (result) {
-                            var badge = document.createElement('img');
-                            badge.src = 'https://img.shields.io/badge/时间轴-lightgrey';
-                            badge.setAttribute('style', 'margin:0px 3px;')
-                            item.insertBefore(badge, item.childNodes[3]);
-                          }
-                        })
-                        UrlExists(xmlUrl).then(result => {
-                          if (result) {
-                            var badge = document.createElement('img');
-                            badge.src = 'https://img.shields.io/badge/弹幕-lightgrey';
-                            badge.setAttribute('style', 'margin:0px 3px;')
-                            if (item.childNodes.length == 4) {
+                          UrlExists(pbfUrl).then(result => {
+                            if (result) {
+                              var badge = document.createElement('img');
+                              badge.src = 'https://img.shields.io/badge/时间轴-lightgrey';
+                              badge.setAttribute('style', 'margin:0px 3px;')
                               item.insertBefore(badge, item.childNodes[3]);
-                            } else {
-                              item.insertBefore(badge, item.childNodes[4]);
                             }
-                          }
-                        })
-                      }
+                          })
+                          UrlExists(xmlUrl).then(result => {
+                            if (result) {
+                              var badge = document.createElement('img');
+                              badge.src = 'https://img.shields.io/badge/弹幕-lightgrey';
+                              badge.setAttribute('style', 'margin:0px 3px;')
+                              if (item.childNodes.length == 4) {
+                                item.insertBefore(badge, item.childNodes[3]);
+                              } else {
+                                item.insertBefore(badge, item.childNodes[4]);
+                              }
+                            }
+                          })
+                        }
+                      })
                     })
                   </script>`
 
