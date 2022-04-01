@@ -70,12 +70,11 @@ export async function renderFolderView(items, path, request) {
                         http.send();
                       })
                     }
-                    var called = false;
                     window.addEventListener("turbolinks:load", function (event) {
-                    if (called) {
+                    if (document.querySelector('.items').classList.contains('resolved')) {
                       return;
                     }
-                    called = true;
+                    document.querySelector('.items').classList.add('resolved');
                     var items = document.querySelectorAll('.item');
                     items.forEach((item) => {
                       var link = item.href;
