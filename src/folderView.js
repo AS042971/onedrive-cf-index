@@ -55,6 +55,54 @@ export async function renderFolderView(items, path, request) {
                     <p><a href="https://spencerwoo.com">Portfolio</a> · <a href="https://blog.spencerwoo.com">Blog</a> · <a href="https://github.com/spencerwooo">GitHub</a></p>
                   </div>`
 
+  const statusScript = `<script>
+                    async function UrlExists(url) {
+                      return new Promise((resolve, reject) => {
+                        var http = new XMLHttpRequest();
+                        http.onload = (e => {
+                          if (http.status == 200) {
+                            resolve(true);
+                          } else {
+                            resolve(false);
+                          }
+                        })
+                        http.open('HEAD', url, true);
+                        http.send();
+                      })
+                    }
+
+                    var items = document.querySelectorAll('.item');
+                    items.forEach((item) => {
+                      var link = item.href;
+                      if (link.endsWith('.mp4')) {
+                        var fileName = link.split('/').pop();
+                        var xmlUrl = 'https://dm.asdanmaku.com/Xml/' + fileName.replace('.mp4', '.xml');
+                        var pbfUrl = 'https://dm.asdanmaku.com/Pbf/' + fileName.replace('.mp4', '.pbf');
+
+                        UrlExists(pbfUrl).then(result => {
+                          if (result) {
+                            var badge = document.createElement('img');
+                            badge.src = 'https://img.shields.io/badge/时间轴-lightgrey';
+                            badge.setAttribute('style', 'margin:0px 3px;')
+                            item.insertBefore(badge, item.childNodes[3]);
+                          }
+                        })
+                        UrlExists(xmlUrl).then(result => {
+                          if (result) {
+                            var badge = document.createElement('img');
+                            badge.src = 'https://img.shields.io/badge/弹幕-lightgrey';
+                            badge.setAttribute('style', 'margin:0px 3px;')
+                            if (item.childNodes.length == 4) {
+                              item.insertBefore(badge, item.childNodes[3]);
+                            } else {
+                              item.insertBefore(badge, item.childNodes[4]);
+                            }
+                          }
+                        })
+                      }
+                    })
+                  </script>`
+
   // Check if current directory contains README.md, if true, then render spinner
   let readmeExists = false
   let readmeFetchUrl = ''
@@ -115,6 +163,6 @@ export async function renderFolderView(items, path, request) {
     ) +
     (readmeExists && !isIndex ? await renderMarkdown(readmeFetchUrl, 'fade-in-fwd', '') : '') +
     (isIndex ? intro : '')
-  )
+  ) + statusScript
   return renderHTML(body, ...[request.pLink, request.pIdx])
 }
