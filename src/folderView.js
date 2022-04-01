@@ -71,7 +71,13 @@ export async function renderFolderView(items, path, request) {
                       })
                     }
 
+                    var oldHref = document.location.href;
+
                     window.addEventListener("load", function (event) {
+                      var observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                          if (oldHref != document.location.href) {
+                            oldHref = document.location.href;
                     var items = document.querySelectorAll('.item');
                     items.forEach((item) => {
                       var link = item.href;
@@ -101,6 +107,9 @@ export async function renderFolderView(items, path, request) {
                           }
                         })
                       }
+                    })
+                          }
+                        })
                       })
                     })
                   </script>`
