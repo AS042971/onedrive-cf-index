@@ -71,7 +71,7 @@ export async function renderFolderView(items, path, request) {
                       })
                     }
 
-                    window.addEventListener("load", function (event) {
+                    window.addEventListener("turbolinks:load", function (event) {
                     var items = document.querySelectorAll('.item');
                     items.forEach((item) => {
                       var link = item.href;
